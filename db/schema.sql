@@ -1,0 +1,18 @@
+CREATE TABLE IF NOT EXISTS bins (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    max_qty INTEGER NOT NULL,
+    low_threshold INTEGER NOT NULL,
+    roi_x INTEGER NOT NULL,
+    roi_y INTEGER NOT NULL,
+    roi_w INTEGER NOT NULL,
+    roi_h INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS readings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    bin_id INTEGER NOT NULL,
+    qty INTEGER NOT NULL,
+    created_at TEXT NOT NULL,
+    FOREIGN KEY (bin_id) REFERENCES bins(id)
+);
