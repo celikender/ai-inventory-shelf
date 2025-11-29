@@ -34,6 +34,20 @@ def insert_reading(bin_id: int, qty: int):
     )
     conn.commit()
     conn.close()
+    
+    
+def insert_demo_bin():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        """
+        INSERT INTO bins (name, max_qty, low_threshold, roi_x, roi_y, roi_w, roi_h)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        """,
+        ("Demo bin", 10, 3, 0, 0, 100, 100),
+    )
+    conn.commit()
+    conn.close()
 
 
 def get_latest_readings():
