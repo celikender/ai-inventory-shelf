@@ -14,6 +14,17 @@
 </head>
 <body>
   <h1>AI Inventory Shelf</h1>
+    <h1>AI Inventory Shelf</h1>
+
+  <div>
+    <button id="refresh-camera">Refresh camera</button><br><br>
+    <img id="camera-view" alt="Camera snapshot" style="max-width: 400px; border: 1px solid #ccc;">
+  </div>
+
+  <br>
+
+  <button id="refresh">Refresh bins</button>
+
   <button id="refresh">Refresh bins</button>
   <p id="message"></p>
 
@@ -32,6 +43,14 @@
   </table>
 
   <script>
+        function refreshCamera() {
+      const img = document.getElementById("camera-view");
+      // Add a cache-buster so the browser doesn’t reuse old images
+      img.src = "/camera/snapshot?t=" + Date.now();
+    }
+
+    document.getElementById("refresh-camera").addEventListener("click", refreshCamera);
+
     async function loadBins() {
       const msg = document.getElementById("message");
       const body = document.getElementById("bins-body");
