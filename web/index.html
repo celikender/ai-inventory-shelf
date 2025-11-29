@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>AI Inventory Shelf</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; max-width: 800px; }
+    th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; }
+    th { background: #f0f0f0; }
+    .status-ok { color: green; }
+    .status-low { color: darkorange; }
+  </style>
+</head>
+<body>
+  <h1>AI Inventory Shelf</h1>
+  <button id="refresh">Refresh bins</button>
+  <p id="message"></p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Bin</th>
+        <th>Product</th>
+        <th>SKU</th>
+        <th>Max qty</th>
+        <th>Low threshold</th>
+      </tr>
+    </thead>
+    <tbody id="bins-body">
+    </tbody>
+  </table>
+
+  <script>
+    async function loadBins() {
+      const msg = document.getElementById("message");
+      const body = document.getElementById("bins-body");
+      msg.textContent = "Loading...";
+      body.innerHTML = "";
+      try {
+        const res = await fetch("/bins");
+        const data = await res.json();
+        if (!Array.isArray(data)) {
+          msg.textContent = "Unexpected response";
+          console.log(data);
+          return;
+        }
+        msg.textContent = `Loaded ${data.length} bin(s).`;
+        for (const bin of data) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${bin.bin_label}</td>
+            <td>${bin.product_name ?? ""}</td>
+            <td>${bin.product_sku ?? ""}</td>
+            <td>${bin.max_qty}</td>
+            <td>${bin.low_threshold}</td>
+          `;
+          body.appendChild(tr);
+        }
+      } catch (err) {
+        msg.textContent = "Error loading bins (see console)";
+        console.error(err);
+      }
+    }
+
+    document.getElementById("refresh").addEventListener("click", loadBins);
+    loadBins();
+  </script>
+</body>
+</html>
